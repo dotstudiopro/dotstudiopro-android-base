@@ -1,0 +1,33 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light" />
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!-- Bottom Navigation -->
+    <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <!--<item name="fontFamily">@font/helvetica_neue_medium</item>-->
+        <item name="android:textSize">12sp</item>
+        <!--<item name="android:textStyle">bold</item>-->
+    </style>
+
+
+    <!--<style name="MyLockTheme" parent="Lock.Theme">
+        <item name="Auth0.HeaderLogo">@drawable/ic_launcher</item>
+        <item name="Auth0.HeaderTitle">@string/app_name</item>
+        <item name="Auth0.PrimaryColor">@color/colorbackground</item>
+        <item name="Auth0.HeaderBackground">@color/colorTextColor</item>
+    </style>-->
+
+    <style name="styleCustomDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@android:color/transparent</item>
+    </style>
+
+</resources>

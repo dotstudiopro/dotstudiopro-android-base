@@ -1,0 +1,14 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="colorbackground">#278be3</color>
+    <color name="colorTint">#0f5998</color>
+    <color name="colorTextColor">#4075a2</color>
+    <color name="colorNavIcon">#dae9f6</color>
+    <color name="colorNavText">#01294b</color>
+    <color name="color_red">#F44336</color>
+    <color name="white">#ffffff</color>
+
+</resources>
+

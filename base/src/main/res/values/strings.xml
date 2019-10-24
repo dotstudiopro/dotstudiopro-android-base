@@ -1,0 +1,32 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">common</string>
+    <string name="title_activity_preloader" tools:ignore="ExtraTranslation">PreloaderActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_select_subscription_plan">SelectSubscriptionPlanActivity</string>
+    <string name="title_activity_billing_information">BillingInformationActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_intro">Intro Activity</string>
+    <string name="title_activity_channel">Channel Activity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_player">PlayerActivity</string>
+
+
+
+    <string name="response_request">data</string>
+    <string name="response_success">success</string>
+    <string name="response_fail">fail</string>
+    <string name="response_subscription">subscription</string>
+
+
+
+
+
+
+    <string name="com_auth0_domain">dotstudiopro.auth0.com</string>
+
+
+
+</resources>
