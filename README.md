@@ -1,0 +1,1 @@
+# dotstudiopro-android-base
