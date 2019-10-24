@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class SPLTCustomCategory extends SPLTCategory {
     public enum Type{CONTINUE_WATCHING, WATCH_AGAIN}
+    private Type type;
 
     public SPLTCustomCategory(SpotLightCategoriesDTO categoriesDTO) {
         super(categoriesDTO);
@@ -20,6 +21,7 @@ public class SPLTCustomCategory extends SPLTCategory {
     }
 
     public void initialize(Type type){
+        this.setType(type);
         switch (type){
             case WATCH_AGAIN:
                 this.setName("Watch Again");
@@ -32,6 +34,14 @@ public class SPLTCustomCategory extends SPLTCategory {
                 this.setHomepage(true);
                 break;
         }
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
     //count waticng & watch again
 

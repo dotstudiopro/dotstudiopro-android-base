@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
@@ -46,12 +47,20 @@ public class SPLTChannelViewHolder extends SPLTContentViewHolder {
     }
     private void initialize(){
         if(toggleButton != null){
-            this.toggleButton.setOnClickListener(new View.OnClickListener() {
+            /*this.toggleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toggleButtonSetImage(v);
+                    //toggleButtonSetImage(v);
                     if(callback != null){
                         callback.onToggleButtonClick(mChannel, ((ToggleButton)v).isChecked());
+                    }
+                }
+            });*/
+            this.toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(callback != null){
+                        callback.onToggleButtonClick(mChannel, isChecked);
                     }
                 }
             });

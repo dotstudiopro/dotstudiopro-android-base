@@ -42,8 +42,10 @@ public class SPLTSettingsFragment extends SPLTBaseFragment {
                 @Override
                 public void onClick(View v) {
 
-                    if(SPLTRouter.getInstance().isUserLoggedIn(getActivity())){
+                    if(SPLTRouter.getInstance().isUserLoggedIn()){
                         SharedPreferencesUtil.getInstance(getActivity()).removeFromSharedPreference(SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE,SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE_KEY);
+                        SPLTRouter.getInstance().setStrClientToken(null);
+
                         refreshSignInButton();
                     }else {
                         showLogin();

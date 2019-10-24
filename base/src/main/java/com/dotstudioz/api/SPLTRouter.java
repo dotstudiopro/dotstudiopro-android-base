@@ -6,7 +6,9 @@ import com.auth0.android.result.Credentials;
 import com.dotstudioz.phone.component.login.SPLTLoginActivity;
 import com.dotstudioz.phone.util.SharedPreferencesUtil;
 
-public class SPLTRouter {
+import java.util.Observable;
+
+public class SPLTRouter extends Observable {
     private static final SPLTRouter ourInstance = new SPLTRouter();
 
     public static SPLTRouter getInstance() {
@@ -42,6 +44,8 @@ public class SPLTRouter {
 
     public void setStrClientToken(String strClientToken) {
         this.strClientToken = strClientToken;
+        setChanged();
+        notifyObservers();
     }
 
     private Credentials mUserCredentials;
@@ -77,13 +81,13 @@ public class SPLTRouter {
 
     //PRODUCTION_URL
     public static String API_DOMAIN; //PRODUCTION SERVER
-    public static String API_DOMAIN_S; //PRODUCTION SERVER
+    public static String API_DOMAIN_S = "https://api.myspotlight.tv"; //PRODUCTION SERVER
     public static String BLOG_LIST_ABS;
     public static String BLOG_LIST_BY_CATEGORY;
     public static String SPOTLIGHT_DOMAIN;
     public static String API_DSPRO_DOMAIN_S;
     public static String API_SPOTLIGHT_DOMAIN;
-    public static String IMAGES_DSPRO_DOMAIN_S;
+    public static String IMAGES_DSPRO_DOMAIN_S = "https://images.dotstudiopro.com/";
     public static String TEASER_DOMAIN;
     public static String ADSERVER_DOMAIN;
     public static String MYSPOTLIGHT_DOMAIN;
@@ -99,9 +103,7 @@ public class SPLTRouter {
     public static String PACKAGE_NAME;
     public static String PLATFORM;
 
-    public boolean isUserLoggedIn(Context context) {
-
-        strClientToken = SharedPreferencesUtil.getInstance(context).getSharedPreference(SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE,SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE_KEY);
+    public boolean isUserLoggedIn() {
         if(strClientToken != null && strClientToken.trim().length()>0){
             return true;
         }

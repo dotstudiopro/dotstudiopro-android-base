@@ -45,6 +45,10 @@ public class SPLTMyListCategory extends SPLTCategory implements ChannelsMyListSe
         this.callback = callback;
     }
 
+public void clear(){
+	this.channels.clear();
+}
+	
     @Override
     public void loadCategoryChannels(Context context, Callback callbackSlugChannel) {
         //api call after login
@@ -256,6 +260,7 @@ public class SPLTMyListCategory extends SPLTCategory implements ChannelsMyListSe
         ArrayList<SPLTChannel> channels = new ArrayList<>();
         for (ChannelMyListDTO channelMyListDTO : channelMyListDTOArrayList) {
             SPLTChannel spltChannel = new SPLTChannel(channelMyListDTO);
+            spltChannel.setInMyList(true);
             channels.add(spltChannel);
         }
         return channels;

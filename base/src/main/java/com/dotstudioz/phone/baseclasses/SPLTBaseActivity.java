@@ -12,27 +12,7 @@ public class SPLTBaseActivity extends AppCompatActivity {
     private AppBusyDialog progressDialog = null;
 
     public SPLTBaseActivity(){
-        try {
-            String accessToken = SharedPreferencesUtil.getInstance(this).getSharedPreference(
-                    SPLTRouter.TOKEN_RESPONSE_SHARED_PREFERENCE,
-                    SPLTRouter.TOKEN_RESPONSE_SHARED_PREFERENCE_KEY);
-            if(accessToken != null && accessToken.length() > 0)
-                SPLTRouter.getInstance().setStrAccessToken(accessToken);
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        try {
-            String clientToken = SharedPreferencesUtil.getInstance(this).getSharedPreference(
-                    SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE,
-                    SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE_KEY);
-
-            if(clientToken != null && clientToken.length() > 0)
-                SPLTRouter.getInstance().setStrClientToken(clientToken);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     /**

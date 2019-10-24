@@ -23,7 +23,6 @@ import com.dotstudioz.dotstudioPRO.services.constants.ApplicationConstantURL;
 import com.dotstudioz.dotstudioPRO.services.constants.ApplicationConstants;
 import com.dotstudioz.dotstudioPRO.services.services.GetAllCategoriesService_V1;
 import com.dotstudioz.dotstudioPRO.services.services.GetAllChannelsFromAllCategoriesService_V1;
-import com.dotstudioz.dotstudioPRO.services.services.GetAllSubscriptionsService_V1;
 import com.dotstudioz.dotstudioPRO.services.services.GetCategoriesFullDataService_V1;
 import com.dotstudioz.dotstudioPRO.services.services.GetUserSubscriptionsService_V1;
 import com.dotstudioz.model.FragmentData;
@@ -85,17 +84,14 @@ public class SPLTHomeActivity extends SPLTBaseActivity implements BottomNavigati
 
         //load home page data
         showProgress();
-        SPLTCompany spltCompany = new SPLTCompany(this);
-        spltCompany.startLoadingData(new SPLTCompany.Callback() {
+
+        SPLTCompany.getInstance().startLoadingData(new SPLTCompany.Callback() {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "startLoadingData onSuccess: "+SPLTCompany.getInstance().getHomepageAllCategories().size());
                 Log.d(TAG, "startLoadingData onSuccess: "+SPLTCompany.getInstance().getCategories().size());
                 hideProgress();
                 reloadUI();
-
-
-                loadWatchList();
 
             }
 
@@ -225,97 +221,12 @@ public class SPLTHomeActivity extends SPLTBaseActivity implements BottomNavigati
             }
         });
         if(checked){
-            spltMyListCategory.deleteChannelToMyList(SPLTHomeActivity.this, channel);
-        }else {
             spltMyListCategory.addChannelToMyList(SPLTHomeActivity.this, channel);
+        }else {
+            spltMyListCategory.deleteChannelToMyList(SPLTHomeActivity.this, channel);
         }
 
     }
 
-    private void loadWatchList(){
-
-        /*SPLTCompany spltCompany = new SPLTCompany(this);
-        spltCompany.startCountinuewatchAndWatchAgain(new SPLTCompany.Callback() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "startLoadingData onSuccess: "+SPLTCompany.getInstance().getHomepageAllCategories().size());
-                Log.d(TAG, "startLoadingData onSuccess: "+SPLTCompany.getInstance().getCategories().size());
-                reloadUI();
-
-
-
-            }
-
-            @Override
-            public void onError(String responseBody) {
-                Log.d(TAG, "onError: ");
-            }
-
-            @Override
-            public void onAccessTokenExpired() {
-                Log.d(TAG, "onAccessTokenExpired: ");
-            }
-
-            @Override
-            public void onClientTokenExpired() {
-                Log.d(TAG, "onClientTokenExpired: ");
-            }
-        });*/
-
-
-            ApplicationConstants.xAccessToken = SPLTRouter.getInstance().getStrAccessToken();
-            ApplicationConstants.CLIENT_TOKEN = SPLTRouter.getInstance().getStrClientToken();
-
-            /*GetAllSubscriptionsService_V1 getAllSubscriptionsService_v1 = new GetAllSubscriptionsService_V1(this);
-            getAllSubscriptionsService_v1.setGetAllSubscriptionsServiceListener(new GetAllSubscriptionsService_V1.IGetAllSubscriptionsService() {
-                @Override
-                public void getAllSubscriptionsServiceResponse(ArrayList<SubscriptionDTO> subscriptionDTOArrayList) {
-                    Log.d(TAG, "getAllSubscriptionsServiceResponse: "+subscriptionDTOArrayList.size());
-                }
-
-                @Override
-                public void getAllSubscriptionsError(String ERROR) {
-                    Log.d(TAG, "getAllSubscriptionsError: "+ERROR);
-                }
-
-                @Override
-                public void accessTokenExpired() {
-                    Log.d(TAG, "accessTokenExpired: ");
-                }
-
-                @Override
-                public void clientTokenExpired() {
-                    Log.d(TAG, "clientTokenExpired: ");
-                }
-            });
-            getAllSubscriptionsService_v1.getAllSubscriptionsService(ApplicationConstants.xAccessToken, ApplicationConstantURL.getInstance().SUBSCRIPTION_LIST);*/
-
-
-        GetUserSubscriptionsService_V1 getUserSubscriptionsService_v1 = new GetUserSubscriptionsService_V1(this);
-        getUserSubscriptionsService_v1.setGetUserSubscriptionsServiceListener(new GetUserSubscriptionsService_V1.IGetUserSubscriptionsService() {
-            @Override
-            public void getUserSubscriptionsServiceResponse(ArrayList<SubscriptionDTO> userSubscriptionDTOArrayList) {
-                Log.d(TAG, "getUserSubscriptionsServiceResponse: "+userSubscriptionDTOArrayList.size());
-            }
-
-            @Override
-            public void getUserSubscriptionsError(String ERROR) {
-                Log.d(TAG, "getUserSubscriptionsError: "+ERROR);
-            }
-
-            @Override
-            public void accessTokenExpired() {
-                Log.d(TAG, "accessTokenExpired: ");
-            }
-
-            @Override
-            public void clientTokenExpired() {
-                Log.d(TAG, "clientTokenExpired: ");
-            }
-        });
-        getUserSubscriptionsService_v1.getUserSubscriptionsService(ApplicationConstants.xAccessToken, ApplicationConstants.CLIENT_TOKEN, ApplicationConstantURL.getInstance().ACTIVE_SUBSCRIPTIONS_LIST);
-
-
-    }
 }
 

@@ -64,6 +64,20 @@ public class SPLTVideoViewHolder extends SPLTContentViewHolder {
             });
 
         }
+
+        if(this.progressView != null){
+            if(this.mVideo.getVideoDuration() != 0 && this.mVideo.getVideoPausedPoint() != 0){
+                this.progressView.setVisibility(View.VISIBLE);
+                this.progressView.setMax(this.mVideo.getVideoDuration());
+                this.progressView.setProgress(mVideo.getVideoPausedPoint());
+            }else {
+                this.progressView.setVisibility(View.GONE);
+            }
+
+
+
+
+        }
         if(this.relativeTopView != null){
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(cardViewwidth, cardViewHeight+35);
             relativeTopView.setLayoutParams(params);

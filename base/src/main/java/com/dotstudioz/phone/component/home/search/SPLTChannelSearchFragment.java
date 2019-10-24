@@ -2,6 +2,7 @@ package com.dotstudioz.phone.component.home.search;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,7 +32,20 @@ public class SPLTChannelSearchFragment extends SPLTChannelsFragment {
     protected EditText editSearch;
     protected TextView emptryView;
 
-    protected String queryString = "";
+    public Handler mHandler = new Handler();;
+    public MyRunnable runnable;
+
+    public class MyRunnable implements Runnable {
+        private String queryString;
+        public MyRunnable(String queryString) {
+            this.queryString = queryString;
+        }
+
+        @Override
+        public void run() {
+            searchText(queryString);
+        }
+    }
 
     public SPLTChannelSearchFragment() {
         // Required empty public constructor
@@ -72,10 +86,14 @@ public class SPLTChannelSearchFragment extends SPLTChannelsFragment {
 
     // TODO: make handler with 2 second timer
     public void makeHandlerAndSerchText(String queryString){
-
+        if(runnable != null){
+            mHandler.removeCallbacks(runnable);
+        }
+        runnable = new MyRunnable(queryString);
+        mHandler.postDelayed(runnable,3000);
 
         // timer
-        searchText(queryString);
+        //searchText(queryString);
     }
 
 

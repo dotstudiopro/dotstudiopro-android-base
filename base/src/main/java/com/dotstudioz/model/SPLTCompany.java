@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.dotstudioz.SPLTConfig;
 import com.dotstudioz.api.SPLTRouter;
 import com.dotstudioz.api.SPLTValidationAPI;
 import com.dotstudioz.dotstudioPRO.models.dto.CustomFieldDTO;
@@ -16,9 +17,9 @@ import com.dotstudioz.dotstudioPRO.services.constants.ApplicationConstantURL;
 import com.dotstudioz.dotstudioPRO.services.constants.ApplicationConstants;
 import com.dotstudioz.dotstudioPRO.services.services.GetAllCategoriesServiceForHomepage_V1;
 import com.dotstudioz.dotstudioPRO.services.services.GetAllCategoriesService_V1;
-import com.dotstudioz.dotstudioPRO.services.services.GetAllSubscriptionsService_V1;
 import com.dotstudioz.dotstudioPRO.services.services.LastWatchedVideosService_V1;
 import com.dotstudioz.phone.component.home.SPLTHomeActivity;
+import com.dotstudioz.phone.util.SharedPreferencesUtil;
 import com.google.gson.Gson;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -26,6 +27,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.function.Predicate;
 
 public class SPLTCompany {
@@ -40,13 +43,21 @@ public class SPLTCompany {
     }
 
     private SPLTCompany() {
+        // TODO strClientToken only Observer insted of full object
+        // currenlty set in clientToken Remove at that time called
+        SPLTRouter.getInstance().addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                onLoginLogout();
+            }
+        });
     }
-    public SPLTCompany(Context context) {
+    /*public SPLTCompany(Context context) {
         this.mContext = context;
         if (this.mContext instanceof Callback) {
             this.mCallback = (Callback) context;
         }
-    }
+    }*/
     public interface Callback {
         void onSuccess();
         void onError(String responseBody);
@@ -58,7 +69,7 @@ public class SPLTCompany {
     private ArrayList<SPLTCategory> categories = new ArrayList<>();
 
     //this will contain continuewatching and watchagain category
-    private ArrayList<SPLTCategory> customCategories = new ArrayList<>();
+    private ArrayList<SPLTCustomCategory> customCategories = new ArrayList<>();
 
     // this will contain all home page categories
     private ArrayList<SPLTCategory> homepageAllCategories = new ArrayList<>();
@@ -78,10 +89,29 @@ public class SPLTCompany {
         this.mCallback = callback;
         loadWatchedVideoList();
     }
-    private void loadCategories(){
-        //api call
+
+    private void onLogin(){
+        this.loadCustomCategories();
+	// this.loadMyList();
+    }
+    private void onLogout(){
+        this.customCategories.clear();
+        this.mergeCategories();
+	    this.myListCategory.clear();
+        for( SPLTCategory category : this.categories){
+            category.onLogout();
+        }
+    }
+    private void onLoginLogout(){
+        if(SPLTRouter.getInstance().isUserLoggedIn()){
+            this.onLogin();
+        }else {
+            this.onLogout();
+        }
 
     }
+
+
     // todo check callback
     private void loadHomePageData(){
         if (mCallback == null) {
@@ -98,9 +128,9 @@ public class SPLTCompany {
         //loadCategoryAPICall();
         //loadWatchedVideoList();
     }
-    private void loadCustomCategory(){
+    private void loadCustomCategories(){
         // if client token avail
-        loadCategoryAPICall();
+        loadWatchedVideoList();
     }
 
     public ArrayList<SPLTCategory> getHomepageAndCustomCategories() {
@@ -176,11 +206,10 @@ public class SPLTCompany {
             SPLTCategory spltCategory = new SPLTCategory(categoriesDTO);
             this.homepageAllCategories.add(spltCategory);
         }
-        this.setHomepageAllCategories(this.homepageAllCategories);
-        loadCustomCategory();
+        this.loadCategories();
     }
 
-    private void loadCategoryAPICall(){
+    private void loadCategories(){
         GetAllCategoriesService_V1 getAllCategoriesService_V1 = new GetAllCategoriesService_V1(mContext);
         /*getAllCategoriesService_V1.PLATFORM = SPLTRouter.getInstance().APP_VERSION_API;*/
         getAllCategoriesService_V1.PLATFORM =  GetAllCategoriesService_V1.PLATFORM_TYPE_ANDROID;
@@ -251,30 +280,32 @@ public class SPLTCompany {
     private void loadWatchedVideoList(){
 
         ApplicationConstants.CLIENT_TOKEN = SPLTRouter.getInstance().getStrClientToken();
+
+        Log.d(TAG, "===loadWatchedVideoList: WS CALL");
         LastWatchedVideosService_V1 lastWatchedVideosService_V1 = new LastWatchedVideosService_V1(mContext);
         lastWatchedVideosService_V1.setLastWatchedVideosService_V1Listener(new LastWatchedVideosService_V1.ILastWatchedVideosService_V1() {
             @Override
             public void callBackFromLastWatchedVideosService(LastWatchedVideosPairDTO lastWatchedVideosPairDTO) {
-                Log.d(TAG, "callBackFromLastWatchedVideosService: "+lastWatchedVideosPairDTO.getContinueWatchingDTOList().size() +" - "+lastWatchedVideosPairDTO.getWatchAgainDTOList().size());
+                Log.d(TAG, "===callBackFromLastWatchedVideosService: "+lastWatchedVideosPairDTO.getContinueWatchingDTOList().size() +" - "+lastWatchedVideosPairDTO.getWatchAgainDTOList().size());
                 processingCallBackFromLastWatchedVideosService(lastWatchedVideosPairDTO);
 
             }
 
             @Override
             public void getVideoPausedPointServiceError(String ERROR) {
-                Log.d(TAG, "getVideoPausedPointServiceError: "+ERROR);
+                Log.d(TAG, "===getVideoPausedPointServiceError: "+ERROR);
                 mergeCategories();
             }
 
             @Override
             public void accessTokenExpired() {
-                Log.d(TAG, "accessTokenExpired: ");
+                Log.d(TAG, "===accessTokenExpired: ");
                 mergeCategories();
             }
 
             @Override
             public void clientTokenExpired() {
-                Log.d(TAG, "clientTokenExpired: ");
+                Log.d(TAG, "===clientTokenExpired: ");
                 mergeCategories();
             }
         });
@@ -313,9 +344,31 @@ public class SPLTCompany {
         });
         this.homepageAndCustomCategories.addAll(allCategories);
         if(this.customCategories != null && this.customCategories.size()>0){
-            this.homepageAndCustomCategories.addAll(this.customCategories);
+            for(SPLTCustomCategory spltCustomCategory: customCategories){
+                if(spltCustomCategory.getType() == SPLTCustomCategory.Type.CONTINUE_WATCHING){
+                    if(SPLTConfig.iContinueWatchIndex == -1){
+                        this.homepageAndCustomCategories.add(spltCustomCategory);
+                    }else {
+                        if(this.homepageAndCustomCategories.size()>SPLTConfig.iContinueWatchIndex){
+                            this.homepageAndCustomCategories.add(SPLTConfig.iContinueWatchIndex, spltCustomCategory);
+                        }else {
+                            this.homepageAndCustomCategories.add(spltCustomCategory);
+                        }
+                    }
+                }
+                if(spltCustomCategory.getType() == SPLTCustomCategory.Type.WATCH_AGAIN){
+                    if(SPLTConfig.iWatchAgainIndex == -1){
+                        this.homepageAndCustomCategories.add(spltCustomCategory);
+                    }else {
+                        if(this.homepageAndCustomCategories.size()>SPLTConfig.iWatchAgainIndex){
+                            this.homepageAndCustomCategories.add(SPLTConfig.iWatchAgainIndex, spltCustomCategory);
+                        }else {
+                            this.homepageAndCustomCategories.add(spltCustomCategory);
+                        }
+                    }
+                }
+            }
         }
-        SPLTCompany.getInstance().setHomepageAndCustomCategories(this.homepageAndCustomCategories);
         if (mCallback != null) {
             mCallback.onSuccess();
         }
@@ -330,7 +383,6 @@ public class SPLTCompany {
         ArrayList<SPLTCategory> categoriesList = new ArrayList<>();
         categoriesList.addAll(this.getCategories());
 
-
         for(int i=0;i<homepageAllCategoriesList.size();i++) {
             for(int j=0;j<categoriesList.size();j++) {
                 if(categoriesList.get(j).getId().equalsIgnoreCase(homepageAllCategoriesList.get(i).getId())) {
@@ -341,7 +393,6 @@ public class SPLTCompany {
             }
         }
         this.setCategories(categoriesList);
-
 
     }
 

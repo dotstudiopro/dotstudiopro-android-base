@@ -51,6 +51,10 @@ public class SPLTChannel extends Observable implements Serializable {
 
     public SPLTChannel(){}
 
+    public void onLogout(){
+       this.setInMyList(false);
+
+    }
     public SPLTChannel(SpotLightChannelDTO spotLightChannelDTO) {
         this.mapFromSpotLightChannelDTO(spotLightChannelDTO);
     }
@@ -204,11 +208,12 @@ public class SPLTChannel extends Observable implements Serializable {
     }*/
 
     public boolean isInMyList() {
-        return isInMyList;
+        boolean flag = SPLTMyListCategory.getInstance().isInMyList(this);
+        return flag;
     }
 
     public void setInMyList(boolean inMyList) {
-        isInMyList = inMyList;
+        this.isInMyList = inMyList;
         setChanged();
         notifyObservers();
     }

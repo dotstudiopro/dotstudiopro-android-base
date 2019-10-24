@@ -65,6 +65,7 @@ public class SPLTCategory implements Serializable {
 
 
 
+
     public void mapFromSpotLightCategoryDTO(SpotLightCategoriesDTO data){
         
         this.setId(data.getCategoryId());
@@ -217,6 +218,12 @@ public class SPLTCategory implements Serializable {
         getAllChannelsFromAllCategoriesService_v1.getAllChannelsFromAllCategoriesService(SPLTRouter.getInstance().getStrAccessToken(), SPLTRouter.getInstance().CHANNELS, categoriesSlug, channelDTOList, spotLightCategoriesDTOList);
 
     }*/
+
+    public void onLogout(){
+        for( SPLTChannel channel : this.channels){
+            channel.onLogout();
+        }
+    }
 
     public boolean isChannelPosterAssignedToCategoriesPoster() {
         return isChannelPosterAssignedToCategoriesPoster;

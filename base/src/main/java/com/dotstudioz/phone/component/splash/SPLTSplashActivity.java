@@ -111,13 +111,22 @@ public class SPLTSplashActivity extends SPLTBaseActivity {
         });
         validationAPI.getValidation();
     }
+
     private void getToken(){
-        String token = SharedPreferencesUtil.getInstance(this).getSharedPreference(
+        String clientToken = SharedPreferencesUtil.getInstance(this).getSharedPreference(
+                SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE,
+                SPLTRouter.USER_DETAILS_RESPONSE_SHARED_PREFERENCE_KEY);
+        if(clientToken != null && clientToken.trim().length()>0){
+            SPLTRouter.getInstance().setStrClientToken(clientToken);
+        }
+
+        String accessToken = SharedPreferencesUtil.getInstance(this).getSharedPreference(
                 SPLTRouter.TOKEN_RESPONSE_SHARED_PREFERENCE,
                 SPLTRouter.TOKEN_RESPONSE_SHARED_PREFERENCE_KEY);
-        if(token != null && token.trim().length()>0){
-            Log.d(TAG, "onTokenSuccess: token"+token);
-            (new SPLTTokenAPI(this)).setToken(token);
+        if(accessToken != null && accessToken.trim().length()>0){
+
+            Log.d(TAG, "onTokenSuccess: token"+accessToken);
+            SPLTRouter.getInstance().setStrAccessToken(accessToken);
             getLatLonCountry();
         }else {
             SPLTTokenAPI tokenAPI = new SPLTTokenAPI(this);
@@ -234,7 +243,7 @@ public class SPLTSplashActivity extends SPLTBaseActivity {
         hideProgress();
         //showHome(); if user logged in
 
-        if(SPLTRouter.getInstance().isUserLoggedIn(this)){
+        if(SPLTRouter.getInstance().isUserLoggedIn()){
             showHome();
         }else {
             showIntro();

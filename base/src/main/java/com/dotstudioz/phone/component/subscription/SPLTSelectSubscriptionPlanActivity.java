@@ -80,8 +80,6 @@ public class SPLTSelectSubscriptionPlanActivity extends SPLTBaseActivity {
             @Override
             public void getAllSubscriptionsServiceResponse(ArrayList<SubscriptionDTO> subscriptionDTOArrayList) {
                 Log.d(TAG, "getAllSubscriptionsServiceResponse: "+subscriptionDTOArrayList.size());
-                String mRequestJSON = new Gson().toJson(subscriptionDTOArrayList);
-                Log.e(TAG, "getAllSubscriptionsServiceResponse: "+ mRequestJSON );
                 createRow(subscriptionDTOArrayList);
             }
 

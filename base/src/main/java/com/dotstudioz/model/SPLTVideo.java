@@ -20,7 +20,7 @@ public class SPLTVideo implements Serializable {
     private String channelID;
     private String casting;
     private String writterDirector;
-
+    private int videoPausedPoint=0;
 
     public SPLTVideo(String videoID) {
         this.videoID = videoID;
@@ -48,6 +48,8 @@ public class SPLTVideo implements Serializable {
         this.setChannelID(videoInfoDTO.getChannelID());
         this.setCasting(videoInfoDTO.getCasting());
         this.setWritterDirector(videoInfoDTO.getWritterDirector());
+        this.setVideoPausedPoint(videoInfoDTO.getVideoPausedPoint());
+
     }
 
     /*private void getVideoDetailAPI() {
@@ -98,6 +100,14 @@ public class SPLTVideo implements Serializable {
         });
         seriesVideoDetailsService_v1.fetchSeriesVideoDetails(videoURL);
     }*/
+
+    public int getVideoPausedPoint() {
+        return videoPausedPoint;
+    }
+
+    public void setVideoPausedPoint(int videoPausedPoint) {
+        this.videoPausedPoint = videoPausedPoint;
+    }
 
     public String getVideoID() {
         return videoID;

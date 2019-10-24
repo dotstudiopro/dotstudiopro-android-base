@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.dotstudioz.api.SPLTRouter;
 import com.dotstudioz.phone.util.Utility;
 
 public class SPLTBaseImageView extends android.support.v7.widget.AppCompatImageView {
@@ -65,7 +66,7 @@ public class SPLTBaseImageView extends android.support.v7.widget.AppCompatImageV
         Context context;
         String fullURL = "";
         if(!strURL.contains("/")){
-            fullURL = "https://images.dotstudiopro.com/"+strURL;
+            fullURL = SPLTRouter.getInstance().IMAGES_DSPRO_DOMAIN_S + strURL;
             return fullURL;
         }else if(URLUtil.isNetworkUrl(strURL)){
             // means url start with http or https
